@@ -1,0 +1,26 @@
+{
+  "name": "data-analytics",
+  "description": "A three-tiered data analytic web application.",
+  "main": "index.js",
+  "authors": [
+    "Group 115-1"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "COMP5347",
+    "JavaScript",
+    "NodeJS",
+    "ExpressJS",
+    "Bootstrap"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}

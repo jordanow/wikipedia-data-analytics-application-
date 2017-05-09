@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "",
-    "dev": "npm install && nodemon index.js",
+    "dev": "npm install && bower install && nodemon index.js",
     "start": "node index.js"
   },
   "keywords": [
@@ -24,6 +24,7 @@
     "pug": "^2.0.0-rc.1"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "jshint": "^2.9.4",
     "nodemon": "^1.11.0"
   }
