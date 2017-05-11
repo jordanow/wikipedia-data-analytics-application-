@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "",
-    "dev": "npm install && bower install && nodemon index.js",
+    "setup": "npm install && bower install",
+    "dev": "nodemon index.js",
     "start": "node index.js"
   },
   "keywords": [
