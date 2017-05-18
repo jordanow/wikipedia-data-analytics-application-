@@ -18,3 +18,9 @@ mixin navbar
               span.sr-only (current)
           li
             a(href='#charts') Charts
+
+        form.navbar-form.navbar-right.search-form(role='search')
+          .form-group
+            input.form-control(name='search', placeholder='Search for article', autocomplete='off', autofocus='autofocus', type='text')
+            button.btn.btn-default(type='submit')
+              i.fa.fa-search

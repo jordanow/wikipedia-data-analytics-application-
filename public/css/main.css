@@ -1,9 +1,23 @@
 /* Remove the border radius from navbar */
+
 nav {
   border-radius: 0 !important;
 }
 
+
 /* Since the top bar is stationary, we need to push the html body by 80px */
+
 body {
   padding-top: 80px !important;
+}
+
+
+/* Style the search form */
+
+form.search-form button {
+  margin-left: 5px;
+}
+
+form.search-form input {
+  min-width: 400px;
 }

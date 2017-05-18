@@ -1,21 +1,20 @@
 mixin charts
-  #charts
-    .col-sm-12
-      .panel.panel-default
-        .panel-body
-          ul.nav.nav-tabs
-            li.active(role="presentation")
-              a(href="#bar-chart" data-toggle="tab")
-                i.fa.fa-bar-chart
-                |  Revision number distribution by year and by user type
-            li(role="presentation")
-              a(href="#pie-chart" data-toggle="tab")
-                i.fa.fa-pie-chart
-                |  Revision number distribution by user type
+  .col-sm-12
+    .panel.panel-default
+      .panel-body
+        ul.nav.nav-tabs
+          li.active(role="presentation")
+            a(href="#bar-chart" data-toggle="tab")
+              i.fa.fa-bar-chart
+              |  Revision number distribution by year and by user type
+          li(role="presentation")
+            a(href="#pie-chart" data-toggle="tab")
+              i.fa.fa-pie-chart
+              |  Revision number distribution by user type
 
-          .tab-content.clearfix
-            #bar-chart.tab-pane.active
-              h3 Bar chart
+        .tab-content.clearfix
+          #bar-chart.tab-pane.active
+            h3 Bar chart
 
-            #pie-chart.tab-pane
-              h3 Pie chart
+          #pie-chart.tab-pane
+            h3 Pie chart

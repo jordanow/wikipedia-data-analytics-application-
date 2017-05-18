@@ -13,20 +13,23 @@ head
 	link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous")
 	link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
 
+	//- Favicon
+	link(rel='icon' href='favicon.ico', type='image/x-icon')
+
 	//- Include the css files
 	link(rel="stylesheet" href="css/main.css")
 
-	//- Include pug mixins
+	//- Include all mixins
 	include ./mixins/navbar.pug
 	include ./mixins/statistics.pug
 	include ./mixins/charts.pug
 
-body.well
+body.well(data-spy="scroll" data-target="#body-content")
 	+navbar
-	.container-fluid
-		.row
+	#body-content.container-fluid
+		#statistics.row
 			+statistics
-		.row
+		#charts.row
 			+charts
 
 	script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
