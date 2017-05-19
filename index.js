@@ -11,7 +11,8 @@ var routes = require('./app/routes');
 var seed = require('./seedFile');
 
 // Import all the database models
-require('./app/models/Users');
+require('./app/models/User');
+require('./app/models/Article');
 
 var app = express();
 
@@ -39,7 +40,7 @@ mongoose.connect('mongodb://localhost/' + config.dbName);
 app.use(routes);
 
 // Save the json files to database
-seed();
+// seed();
 
 app.listen(3000, function () {
   console.log('Data analytics app listening on port 3000!')

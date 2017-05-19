@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
 
 // Seed/JSON files
 var adminUserFile = './data/admins.txt',
-  botUserFile = './data/bots.txt';
+  botUserFile = './data/bots.txt',
+  revisionsDir = './data/revisions';
 
 // global config
 var config = require('./config');
@@ -73,7 +74,8 @@ var seedBots = function (cb) {
         readFile(botUserFile)
           .on('line', function (user) {
             User.create({
-              name: user
+              name: user,
+              bot: true
             });
           }).on('close', cb);
       }
@@ -81,19 +83,54 @@ var seedBots = function (cb) {
   });
 };
 
-// remove all users from database
-var cleanUsers = function (cb) {
-  var User = mongoose.model('User');
-  User.remove(cb);
+// remove all data from model database
+var cleanModel = function (model, cb) {
+  var Model = mongoose.model(model);
+  Model.remove(cb);
+};
+
+// Save all this articles using bulk insert
+var saveArticles = function (Model, articles, cb) {
+  console.log(articles.length);
+  Model.insertMany(articles, cb);
+};
+
+var seedRevisions = function (cb) {
+  var Article = mongoose.model('Article');
+
+  fs.readdir(revisionsDir, function (err, filenames) {
+    if (err) {
+      cb(err);
+    } else {
+      async.eachLimit(filenames, 10, function (fileName, next) {
+        fs.readFile(revisionsDir + '/' + fileName, 'utf-8', function (err, data) {
+          if (err) {
+            next(err);
+          } else {
+            saveArticles(Article, JSON.parse(data), next);
+          }
+        });
+      }, cb);
+    }
+  });
 };
 
 module.exports = function () {
-
   async.series([
-    cleanUsers,
+    function (cb) {
+      cleanModel('User', cb);
+    },
+    function (cb) {
+      cleanModel('Article', cb);
+    },
     seedUsers,
-    seedBots
+    seedBots,
+    seedRevisions
   ], function (err, results) {
-    console.log(err, results);
+    if (err) {
+      console.log('Error while saving data to MongoDB', err);
+    } else {
+      console.log('Run robomongo and check your documents. All data must be in Wikipedia database and users collection should have 1479 entries while articles should be 550084');
+    }
   });
 };
