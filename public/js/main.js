@@ -25,6 +25,7 @@
 
      // Set chart options
      var options = {
+       'title': 'Revision number distribution by user type',
        'width': 800,
        'height': 500
      };
@@ -40,13 +41,11 @@
    var drawBarChart = function (chartData) {
 
      // Create the data table.
-     var data = new google.visualization.DataTable();
-     data.addColumn('string', 'User type');
-     data.addColumn('number', 'Revisions made');
-     data.addRows(chartData);
+     var data = new google.visualization.arrayToDataTable(chartData);
 
      // Set chart options
      var options = {
+       'title': 'Revision number distribution by year and by user type',
        'width': 800,
        'height': 500
      };
