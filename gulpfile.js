@@ -13,7 +13,7 @@ gulp.task('nodemon', function (cb) {
   return nodemon({
     script: 'index.js',
     ext: 'js',
-    watch: ['routes/**/*.js', 'index.js'],
+    watch: ['app/**/*.js', 'index.js', 'seedFile.js'],
     ignore: ["public/*"]
   }).on('start', function () {
     // to avoid nodemon being started multiple times
