@@ -1,16 +1,18 @@
-mixin statistics
+mixin statistics(data)
   .col-sm-6
     .panel.panel-primary
       .panel-heading
         h3.panel-title Most revisions
       .panel-body
-        | Panel content
+        h4 #{ data.revisions.most._id }
+        h5 Total revisions: #{ data.revisions.most.count }
   .col-sm-6
     .panel.panel-danger
       .panel-heading
         h3.panel-title Least revisions
       .panel-body
-        | Panel content
+        h4 #{ data.revisions.least._id }
+        h5 Total revisions: #{ data.revisions.least.count }
   .col-sm-6
     .panel.panel-primary
       .panel-heading

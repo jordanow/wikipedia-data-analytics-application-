@@ -1,0 +1,35 @@
+- Compute various statistics at overall data set level and at individual article level.
+
+- Data set level
+  - article with the most number of revisions.
+  - article with the least number of revisions
+  - article edited by largest group of registered unique users.  Each wiki article is edited by a number of users, some making multiple revisions. The number of unique users is a good indicator of an article’s popularity.
+  - article edited by smallest group of registered users.
+  - article with the longest history. For each article, the revision with the smallest timestamp is the first revision, indicating the article’s creation time. An article’s age is the duration between now and its creation time
+  - article with the shortest history (measured by age).
+
+  Charts
+    - A bar chart of revision number distribution by year and by user type across the whole data set.
+    - A pie chart of revision number distribution by user type across the whole data set. four types of users: anonymous, administrator, bot and regular user. Revisions made by anonymous users are indicated by the “anon” field in the revision JSON object. Revisions without “anon” field can be made by the other three types of users. You will need to compare the user name with the names in the two text files to determine if a user is administrator, bot or just regular ones.
+
+
+- Individual page statistics
+  - Drop down list to select an article from the list of all articles.
+    - May add features like total number of revisions next to article title
+    - Allow autocomplete to quickly get the article title of interest
+  - Once a user selects an article, check if the history of that article is up to date.
+    - If not fetch the latest history for MediaWiki
+    - Show a message indicating that new data is being fetched and how many revisions have been downloaded. It may be possible that no new data is fetched.
+  - Once the article's history is updated, show the following for the fetched article
+    - title
+    - total number of revisions
+    - top 5 regular users ranked by total revision numbers on this article, and the
+respective revision numbers.
+
+    - Charts (Should be able to switch btw charts)
+      - bar chart of revision number distributed by year and by user type for this article.
+      - pie chart of revision number distribution based on user type for this article.
+      - bar chart of revision number distributed by year made by one or a few of the top 5 users for this article.
+      -
+
+
