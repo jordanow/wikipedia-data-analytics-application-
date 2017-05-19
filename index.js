@@ -6,13 +6,13 @@ var express = require('express'),
   config = require('./config'),
   session = require('express-session');
 
-// Internal to the app
-var routes = require('./app/routes');
-var seed = require('./seedFile');
-
 // Import all the database models
 require('./app/models/User');
 require('./app/models/Article');
+
+// Internal to the app
+var routes = require('./app/routes');
+var seed = require('./seedFile');
 
 var app = express();
 

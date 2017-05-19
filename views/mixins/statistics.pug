@@ -18,13 +18,15 @@ mixin statistics(data)
       .panel-heading
         h3.panel-title Article edited by largest group of registered users
       .panel-body
-        | Panel content
+        h4 #{ data.uniqueRevisions.most._id }
+        h5 Total unique users: #{ data.uniqueRevisions.most.count }
   .col-sm-6
     .panel.panel-danger
       .panel-heading
         h3.panel-title Article edited by smallest group of registered users
       .panel-body
-        | Panel content
+        h4 #{ data.uniqueRevisions.least._id }
+        h5 Total unique users: #{ data.uniqueRevisions.least.count }
   .col-sm-6
     .panel.panel-primary
       .panel-heading

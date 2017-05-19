@@ -9,8 +9,9 @@ var adminUserFile = './data/admins.txt',
   botUserFile = './data/bots.txt',
   revisionsDir = './data/revisions';
 
-// global config
-var config = require('./config');
+// Database models
+var User = mongoose.model('User');
+var Article = mongoose.model('Article');
 
 // Gets the count for the given model
 var getCount = function (Model, query, cb) {
@@ -31,9 +32,6 @@ var readFile = function (fileName) {
  * If the user database is empty, save all the users in database
  */
 var seedUsers = function (cb) {
-  // Database models
-  var User = mongoose.model('User');
-
   getCount(User, {
     bot: false
   }, function (err, count) {
@@ -59,9 +57,6 @@ var seedUsers = function (cb) {
  * If the user database is empty, save all the bots in database
  */
 var seedBots = function (cb) {
-  // Database models
-  var User = mongoose.model('User');
-
   getCount(User, {
     bot: true
   }, function (err, count) {
@@ -91,13 +86,10 @@ var cleanModel = function (model, cb) {
 
 // Save all this articles using bulk insert
 var saveArticles = function (Model, articles, cb) {
-  console.log(articles.length);
   Model.insertMany(articles, cb);
 };
 
 var seedRevisions = function (cb) {
-  var Article = mongoose.model('Article');
-
   fs.readdir(revisionsDir, function (err, filenames) {
     if (err) {
       cb(err);
@@ -116,6 +108,7 @@ var seedRevisions = function (cb) {
 };
 
 module.exports = function () {
+  console.log('Please wait while all data is being loaded into MongoDB...');
   async.series([
     function (cb) {
       cleanModel('User', cb);

@@ -10,7 +10,8 @@ var articleSchema = new mongoose.Schema({
   size: Number,
   timestamp: String,
   title: String,
-  user: String
+  user: String,
+  anon: Boolean
 });
 
 // the schema is useless so far
