@@ -38,8 +38,8 @@
    // Callback that creates and populates a data table,
    // instantiates the pie chart, passes in the data and
    // draws it.
-   var drawBarChart = function (chartData) {
-
+   var drawBarChart = function (res) {
+     var chartData = res.chartData;
      // Create the data table.
      var data = new google.visualization.arrayToDataTable(chartData);
 
@@ -47,7 +47,15 @@
      var options = {
        'title': 'Revision number distribution by year and by user type',
        'width': 800,
-       'height': 500
+       'height': 500,
+       hAxis: {
+         title: 'Timestamp',
+         slantedText: true,
+         slantedTextAngle: 90,
+       },
+       vAxis: {
+         title: "Number of revisions"
+       }
      };
 
      var barChart = new google.visualization.ColumnChart(document.getElementById('bar-chart-1'));
