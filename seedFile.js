@@ -31,7 +31,8 @@ var readFile = function (fileName) {
  * If the users exist, exit the process
  * If the user database is empty, save all the users in database
  */
-var seedUsers = function (cb) {
+var seedAdmins = function (cb) {
+  console.log('Saving admins');
   getCount(User, {
     bot: false
   }, function (err, count) {
@@ -57,6 +58,7 @@ var seedUsers = function (cb) {
  * If the user database is empty, save all the bots in database
  */
 var seedBots = function (cb) {
+  console.log('Saving bots');
   getCount(User, {
     bot: true
   }, function (err, count) {
@@ -86,10 +88,16 @@ var cleanModel = function (model, cb) {
 
 // Save all this articles using bulk insert
 var saveArticles = function (Model, articles, cb) {
-  Model.insertMany(articles, cb);
+  async.map(articles, function (article, cb) {
+    article.timestamp = new Date(article.timestamp);
+    cb(null, article);
+  }, function (err, articles) {
+    Model.insertMany(articles, cb);
+  });
 };
 
 var seedRevisions = function (cb) {
+  console.log('Saving articles');
   fs.readdir(revisionsDir, function (err, filenames) {
     if (err) {
       cb(err);
@@ -111,12 +119,14 @@ module.exports = function () {
   console.log('Please wait while all data is being loaded into MongoDB...');
   async.series([
     function (cb) {
+      console.log('Removing all the users');
       cleanModel('User', cb);
     },
     function (cb) {
+      console.log('Removing all the articles');
       cleanModel('Article', cb);
     },
-    seedUsers,
+    seedAdmins,
     seedBots,
     seedRevisions
   ], function (err, results) {

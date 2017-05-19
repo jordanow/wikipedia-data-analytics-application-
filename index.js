@@ -40,7 +40,7 @@ mongoose.connect('mongodb://localhost/' + config.dbName);
 app.use(routes);
 
 // Save the json files to database
-// seed();
+seed();
 
 app.listen(3000, function () {
   console.log('Data analytics app listening on port 3000!')

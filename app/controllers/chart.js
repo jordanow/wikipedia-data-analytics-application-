@@ -5,7 +5,7 @@ var Article = mongoose.model('Article'),
   User = mongoose.model('User');
 
 module.exports = {
-  home: function (req, res, next) {
+  pie: function (req, res, next) {
 
     async.parallel([
         function (cb) {
@@ -112,5 +112,14 @@ module.exports = {
           ]);
         }
       });
+  },
+
+  bar: function (req, res, next) {
+    return res.json([
+      ['Bot', 25],
+      ['Anonymous', 25],
+      ['Administrator', 25],
+      ['Regular user', 25]
+    ]);
   }
 };

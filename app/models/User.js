@@ -3,7 +3,10 @@ var mongoose = require('mongoose');
 
 // Define the schema
 var userSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    index: true
+  },
   bot: {
     type: Boolean,
     default: false

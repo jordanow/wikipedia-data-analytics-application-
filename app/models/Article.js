@@ -8,9 +8,15 @@ var articleSchema = new mongoose.Schema({
   revid: Number,
   sha1: String,
   size: Number,
-  timestamp: String,
-  title: String,
-  user: String,
+  timestamp: Date,
+  title: {
+    type: String,
+    index: true
+  },
+  user: {
+    type: String,
+    index: true
+  },
   anon: Boolean
 });
 
