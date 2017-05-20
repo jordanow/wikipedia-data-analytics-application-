@@ -6,8 +6,8 @@ var homeController = require('../controllers/home'),
   chartController = require('../controllers/chart');
 
 // api
-router.get('/api/charts/pie', chartController.pie);
-router.get('/api/charts/bar', chartController.bar);
+router.get('/api/charts/home/pie', chartController.homePie);
+router.get('/api/charts/home/bar', chartController.homeBar);
 router.get('/api/articles/list', articleController.list);
 
 // Pages

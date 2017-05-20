@@ -6,7 +6,7 @@ var Article = mongoose.model('Article'),
   User = mongoose.model('User');
 
 module.exports = {
-  pie: function (req, res, next) {
+  homePie: function (req, res, next) {
 
     async.parallel([
         function (cb) {
@@ -115,7 +115,7 @@ module.exports = {
       });
   },
 
-  bar: function (req, res, next) {
+  homeBar: function (req, res, next) {
     async.parallel([
       function (cb) {
         // Get all the admins who edited the articles

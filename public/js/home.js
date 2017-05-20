@@ -6,10 +6,10 @@
  $(document).ready(function () {
    var getData = function () {
      // Fetch the chart data from charts/pie api
-     $.getJSON('/api/charts/pie', null, drawPieChart);
+     $.getJSON('/api/charts/home/pie', null, drawPieChart);
 
      // Fetch the chart data from charts/bar api
-     $.getJSON('/api/charts/bar', null, drawBarChart);
+     $.getJSON('/api/charts/home/bar', null, drawBarChart);
 
      // Fetch list of articles
      $.getJSON('/api/articles/list', null, populateArticleList);
