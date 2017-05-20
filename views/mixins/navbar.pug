@@ -7,7 +7,7 @@ mixin navbar
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='#')
+        a.navbar-brand(href='/')
           i.fa.fa-desktop
           span  COMP 5347
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
@@ -21,7 +21,7 @@ mixin navbar
 
         form.navbar-form.navbar-right.search-form(role='search', action="/article")
           .form-group
-            input.form-control(name='search', placeholder='Search for article', autocomplete='off', autofocus='autofocus', type='text', list="articleList")
+            input.form-control(name='search', placeholder='Search for article', autocomplete='off', autofocus='autofocus', type='text', list="articleList", required="true")
             button.btn.btn-default(type='submit')
               i.fa.fa-search
 

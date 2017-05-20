@@ -3,6 +3,14 @@ var mongoose = require('mongoose'),
 
 var Article = mongoose.model('Article');
 module.exports = {
+  render: function (req, res, next) {
+    res.render('article.pug', {
+      data: {
+        // revisions: results[0],
+        // uniqueRevisions: results[1]
+      }
+    });
+  },
   list: function (req, res, next) {
     Article.distinct('title', function (err, articles) {
       if (err) {
