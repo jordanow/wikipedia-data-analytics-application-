@@ -5,11 +5,21 @@
 
  $(document).ready(function () {
    var getData = function () {
-     // Fetch the chart data from home/charts/pie api
-     $.getJSON('/home/charts/pie', null, drawPieChart);
+     // Fetch the chart data from charts/pie api
+     $.getJSON('/charts/pie', null, drawPieChart);
 
-     // Fetch the chart data from home/charts/bar api
-     $.getJSON('/home/charts/bar', null, drawBarChart);
+     // Fetch the chart data from charts/bar api
+     $.getJSON('/charts/bar', null, drawBarChart);
+
+     // Fetch list of articles
+     $.getJSON('/articles/list', null, populateArticleList);
+   };
+
+   var populateArticleList = function (data) {
+     console.log(data);
+     data.articles.map(function (article) {
+       $('#articleList').append("<option value='" + article + "'>");
+     });
    };
 
    // Callback that creates and populates a data table,

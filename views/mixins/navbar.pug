@@ -19,8 +19,10 @@ mixin navbar
           li
             a(href='#charts') Charts
 
-        form.navbar-form.navbar-right.search-form(role='search')
+        form.navbar-form.navbar-right.search-form(role='search', action="/article")
           .form-group
-            input.form-control(name='search', placeholder='Search for article', autocomplete='off', autofocus='autofocus', type='text')
+            input.form-control(name='search', placeholder='Search for article', autocomplete='off', autofocus='autofocus', type='text', list="articleList")
             button.btn.btn-default(type='submit')
               i.fa.fa-search
+
+            datalist(id="articleList")
