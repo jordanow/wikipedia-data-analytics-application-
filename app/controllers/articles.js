@@ -12,7 +12,14 @@ module.exports = {
     });
   },
   list: function (req, res, next) {
-    Article.distinct('title', function (err, articles) {
+    Article.aggregate([{
+      $group: {
+        _id: "$title",
+        count: {
+          $sum: 1
+        }
+      }
+    }], function (err, articles) {
       if (err) {
         next(err);
       } else {

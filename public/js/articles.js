@@ -11,7 +11,7 @@ $(document).ready(function () {
 
   var populateArticleList = function (data) {
     data.articles.map(function (article) {
-      $('#articleList').append("<option value='" + article + "'>");
+      $('#articleList').append("<option value='" + article._id + ' - ' + article.count + " revisions" + "'>");
     });
   };
 
