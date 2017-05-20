@@ -118,6 +118,7 @@ module.exports = {
   bar: function (req, res, next) {
     async.parallel([
       function (cb) {
+        // Get all the admins who edited the articles
         User.aggregate([{
             $match: {
               bot: false
@@ -130,11 +131,12 @@ module.exports = {
               }
             }
           }],
-          function (err, admins) {
-            groupUsersByYear(admins[0].users, cb);
+          function (err, bots) {
+            groupUsersByYear(bots[0].users, cb);
           });
       },
       function (cb) {
+        // Get all the bots who edited the articles
         User.aggregate([{
             $match: {
               bot: true
@@ -152,11 +154,18 @@ module.exports = {
           });
       },
       function (cb) {
-        User.aggregate([{
+        // Get all users who edited the articles
+        Article.aggregate([{
+            $match: {
+              anon: {
+                $exists: false
+              }
+            }
+          }, {
             $group: {
               _id: null,
               users: {
-                $push: "$name"
+                $push: "$user"
               }
             }
           }],
@@ -194,32 +203,29 @@ module.exports = {
           adminsYear = results[0];
 
         var finalData = {};
+
         pushToObj(finalData, allUsersYear, 'allUsers');
         pushToObj(finalData, botsYear, 'bots');
         pushToObj(finalData, adminsYear, 'admins');
         pushToObj(finalData, anonsYear, 'anons');
 
-        console.log(finalData);
         var chartData = [
           ['Year', 'Anonymous', 'Administrator', 'Bot', 'Regular User']
         ];
 
         async.each(_.keys(finalData), function (key) {
           var regularUsers = finalData[key].allUsers - finalData[key].admins - finalData[key].bots;
-          chartData.push([key, finalData[key].anons || 0, finalData[key].admins || 0, finalData[key].bots || 0, regularUsers || 0]);
+          chartData.push([
+            key,
+            finalData[key].anons || 0,
+            finalData[key].admins || 0,
+            finalData[key].bots || 0,
+            regularUsers || 0
+          ]);
         });
 
-        // chartData = [
-        //   ['Year', 'Administrator', 'Anonymous', 'Bot', 'Regular User'],
-        //   ['2014', 1000, 400, 200, 240],
-        //   ['2015', 1170, 460, 250, 230],
-        //   ['2016', 660, 1120, 300, 400],
-        //   ['2017', 1030, 540, 350, 300]
-        // ];
-
         return res.json({
-          chartData: chartData,
-          results: results
+          chartData: chartData
         });
       }
     });
@@ -235,11 +241,11 @@ var pushToObj = function (target, src, type) {
   });
 };
 
-var groupUsersByYear = function (users, cb) {
+var groupUsersByYear = function (editors, cb) {
   Article.aggregate([{
     $match: {
       user: {
-        $in: users
+        $in: editors
       }
     }
   }, {
