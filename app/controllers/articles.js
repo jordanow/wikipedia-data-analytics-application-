@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
   async = require('async');
 
 var Article = mongoose.model('Article');
+var User = mongoose.model('User');
 module.exports = {
   render: function (req, res, next) {
     var queryParam = req.query.search;
@@ -21,16 +22,72 @@ module.exports = {
           Article.findOne({
             title: articleTitle
           }, cb);
+        },
+        function (cb) {
+          Article.aggregate([{
+              $match: {
+                title: articleTitle
+              }
+            },
+            {
+              $group: {
+                _id: "$title",
+                count: {
+                  $sum: 1
+                }
+              }
+            }
+          ], cb);
+        },
+        function (cb) {
+          User.distinct('name', function (err, registeredUsers) {
+            if (err) {
+              cb(err);
+            } else {
+              Article.aggregate([{
+                  $match: {
+                    title: articleTitle,
+                    anon: {
+                      $exists: false
+                    },
+                    users: {
+                      $nin: registeredUsers
+                    }
+                  }
+                },
+                {
+                  $group: {
+                    _id: "$user",
+                    count: {
+                      $sum: 1
+                    }
+                  }
+                },
+                {
+                  $sort: {
+                    count: -1
+                  }
+                }
+              ], cb);
+            }
+          });
         }
       ], function (err, results) {
         if (err) {
           next(err);
         } else {
-          var article = results[0];
+          var article = results[0],
+            topEditors = results[2];
+
+          // Only send top 5 editors
+          topEditors = topEditors.slice(0, 5);
+
           res.render('article.pug', {
             data: {
               found: !!article,
-              article: article
+              article: article,
+              revisions: results[1][0].count,
+              topEditors: topEditors
             }
           });
         }

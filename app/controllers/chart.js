@@ -5,7 +5,23 @@ var mongoose = require('mongoose'),
 var Article = mongoose.model('Article'),
   User = mongoose.model('User');
 
+// Extracts the article title from the given string
+var getArticleTitle = function (query) {
+  var articleTitle;
+  if (!query || !query.split('-')[0]) {
+    articleTitle = null;
+  } else {
+    articleTitle = query.split('-')[0].trim()
+  }
+  return articleTitle;
+};
+
 module.exports = {
+  articlePie: function (req, res, next) {
+    var articleTitle = getArticleTitle(req.query.search);
+  },
+  articleBar1: function (req, res, next) {},
+  articleBar2: function (req, res, next) {},
   homePie: function (req, res, next) {
 
     async.parallel([
@@ -214,7 +230,7 @@ module.exports = {
         ];
 
         async.each(_.keys(finalData), function (key) {
-          var regularUsers = finalData[key].allUsers - finalData[key].admins - finalData[key].bots;
+          var regularUsers = finalData[key].allUsers - finalData[key].anons - finalData[key].admins - finalData[key].bots;
           chartData.push([
             key,
             finalData[key].anons || 0,

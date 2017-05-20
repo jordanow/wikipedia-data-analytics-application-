@@ -27,10 +27,26 @@ head
 body.well
   +navbar
   .container-fluid
-    - if(!data.found)
-      h3 Article not found
-    - if(data.found)
-      h2 #{ data.article.title }
+    .col-sm-12
+      - if(!data.found)
+        h3 Article not found
+      - if(data.found)
+        .row
+          .col-sm-12
+            .panel.panel-primary
+              .panel-heading
+                h3.panel-title #{ data.article.title }
+              .panel-body
+                .col-sm-9
+                  h4 Total revisions: #{ data.revisions }
+
+                .col-sm-3
+                  h4 Top 5 regular users
+                  ul.list-group
+                    each editor in data.topEditors
+                      li.list-group-item
+                        span.badge #{ editor.count }
+                        | #{ editor._id }
 
       #charts.row
         +articleCharts
