@@ -22,15 +22,18 @@ head
 
   //- Include all mixins
   include ./mixins/navbar.pug
-  include ./mixins/statistics.pug
   include ./mixins/charts.pug
 
 body.well
   +navbar
   .container-fluid
-    #statistics.row
+    - if(!data.found)
+      h3 Article not found
+    - if(data.found)
+      h2 #{ data.article.title }
 
-    #charts.row
+      #charts.row
+        +articleCharts
 
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
   script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous")

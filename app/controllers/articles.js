@@ -1,15 +1,41 @@
 var mongoose = require('mongoose'),
+  _ = require('lodash'),
   async = require('async');
 
 var Article = mongoose.model('Article');
 module.exports = {
   render: function (req, res, next) {
-    res.render('article.pug', {
-      data: {
-        // revisions: results[0],
-        // uniqueRevisions: results[1]
-      }
-    });
+    var queryParam = req.query.search;
+
+    if (!queryParam || !queryParam.split('-')[0]) {
+      res.render('article.pug', {
+        data: {
+          found: false
+        }
+      });
+    } else {
+      var articleTitle = queryParam.split('-')[0].trim();
+
+      async.parallel([
+        function (cb) {
+          Article.findOne({
+            title: articleTitle
+          }, cb);
+        }
+      ], function (err, results) {
+        if (err) {
+          next(err);
+        } else {
+          var article = results[0];
+          res.render('article.pug', {
+            data: {
+              found: !!article,
+              article: article
+            }
+          });
+        }
+      });
+    }
   },
   list: function (req, res, next) {
     Article.aggregate([{

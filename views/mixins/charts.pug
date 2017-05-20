@@ -7,7 +7,7 @@ mixin charts
             a(href="#bar-chart" data-toggle="tab")
               i.fa.fa-bar-chart
               |  Revision number distribution by year and by user type
-          li(role="presentation" id="pie-chart-tab-btn")
+          li(role="presentation")
             a(href="#pie-chart" data-toggle="tab")
               i.fa.fa-pie-chart
               |  Revision number distribution by user type
@@ -15,7 +15,31 @@ mixin charts
         .tab-content.clearfix
           #bar-chart.tab-pane.active
             #bar-chart-1
-
-
           #pie-chart.tab-pane
             #pie-chart-1
+
+mixin articleCharts
+  .col-sm-12
+    .panel.panel-default
+      .panel-body
+        ul.nav.nav-tabs
+          li.active(role="presentation")
+            a(href="#bar-chart-1" data-toggle="tab")
+              i.fa.fa-bar-chart
+              |  Revision number distribution by year and by user type
+          li(role="presentation")
+            a(href="#pie-chart" data-toggle="tab")
+              i.fa.fa-pie-chart
+              |  Revision number distribution by user type
+          li(role="presentation")
+            a(href="#bar-chart-2" data-toggle="tab")
+              i.fa.fa-bar-chart
+              |  Revision number distribution by year made by one or a few of the top 5 users
+
+        .tab-content.clearfix
+          #bar-chart-1.tab-pane.active
+            #bar-chart-1
+          #pie-chart.tab-pane
+            #pie-chart-1
+          #bar-chart-2.tab-pane
+            #bar-chart-2
