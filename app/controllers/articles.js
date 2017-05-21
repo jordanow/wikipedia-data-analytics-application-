@@ -1,11 +1,13 @@
 var mongoose = require('mongoose'),
   _ = require('lodash'),
+  request = require('request'),
   async = require('async');
 
 var Article = mongoose.model('Article');
 var User = mongoose.model('User');
 module.exports = {
   render: function (req, res, next) {
+    var mediaWikiAPI = 'https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=user|comment|timestamp|sha1|parsedcomment&format=json&titles=';
     var queryParam = req.query.search;
 
     if (!queryParam || !queryParam.split('-')[0]) {
@@ -21,6 +23,10 @@ module.exports = {
         function (cb) {
           Article.findOne({
             title: articleTitle
+          }, {}, {
+            sort: {
+              timestamp: -1
+            }
           }, cb);
         },
         function (cb) {
@@ -75,11 +81,23 @@ module.exports = {
               ], cb);
             }
           });
+        },
+        function (cb) {
+          request({
+            url: mediaWikiAPI + articleTitle,
+            headers: {
+              'User-Agent': 'request'
+            }
+          }, function (err, response, body) {
+            cb(err, body);
+          });
         }
       ], function (err, results) {
         if (err) {
           next(err);
         } else {
+          var mediaWikiResults = JSON.parse(results[3]);
+
           var article = results[0],
             topEditors = results[2];
 
