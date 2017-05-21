@@ -19,9 +19,265 @@ var getArticleTitle = function (query) {
 module.exports = {
   articlePie: function (req, res, next) {
     var articleTitle = getArticleTitle(req.query.search);
+    async.parallel([
+        function (cb) {
+          // Find the number of anonymous editors
+          // for this article
+          Article.count({
+            anon: {
+              $exists: true
+            },
+            title: articleTitle
+          }, cb);
+        },
+        function (cb) {
+          // Find the number of non anonymous editors
+          // for this article
+          Article.count({
+            anon: {
+              $exists: false
+            },
+            title: articleTitle
+          }, cb);
+        },
+        function (cb) {
+          // Find the bots who edited this article
+          User.aggregate([{
+              $match: {
+                bot: true
+              }
+            }, {
+              $group: {
+                _id: null,
+                users: {
+                  $push: "$name"
+                }
+              }
+            }],
+            function (err, bots) {
+              if (err) {
+                cb(err);
+              } else {
+                Article.count({
+                  user: {
+                    $in: bots[0].users
+                  },
+                  title: articleTitle
+                }, function (err, count) {
+                  if (err) {
+                    cb(err);
+                  } else {
+                    cb(null, count);
+                  }
+                });
+              }
+            });
+        },
+        function (cb) {
+          // 1. Get all the bots from database
+          // 2. Get all the admins from database
+          // 3. Count how many times bots and admins edited the article
+          User.aggregate([{
+              $match: {
+                bot: false
+              }
+            }, {
+              $group: {
+                _id: null,
+                users: {
+                  $push: "$name"
+                }
+              }
+            }],
+            function (err, admins) {
+              if (err) {
+                cb(err);
+              } else {
+                Article.count({
+                  user: {
+                    $in: admins[0].users
+                  },
+                  title: articleTitle
+                }, function (err, count) {
+                  if (err) {
+                    cb(err);
+                  } else {
+                    cb(null, count);
+                  }
+                });
+              }
+            });
+        },
+      ],
+      function (err, results) {
+        if (err) {
+          next(err);
+        } else {
+          var articlesEditedByAnons = results[0];
+          var articlesEditedByKnownUsers = results[1];
+
+          var articlesEditedByBots = results[2];
+          var articlesEditedByAdmins = results[3];
+
+          var articlesEditedByRegulars = articlesEditedByKnownUsers - articlesEditedByBots - articlesEditedByAdmins;
+          return res.json([
+            ['Bot', articlesEditedByBots],
+            ['Anonymous', articlesEditedByAnons],
+            ['Administrator', articlesEditedByAdmins],
+            ['Regular user', articlesEditedByRegulars]
+          ]);
+        }
+      });
   },
-  articleBar1: function (req, res, next) {},
-  articleBar2: function (req, res, next) {},
+  articleBar1: function (req, res, next) {
+    var articleTitle = getArticleTitle(req.query.search);
+
+    async.parallel([
+      function (cb) {
+        // Get all the admins who edited this article
+        User.aggregate([{
+            $match: {
+              bot: false
+            }
+          }, {
+            $group: {
+              _id: null,
+              users: {
+                $push: "$name"
+              }
+            }
+          }],
+          function (err, bots) {
+            groupUsersByYear(bots[0].users, articleTitle, cb);
+          });
+      },
+      function (cb) {
+        // Get all the bots who edited the articles
+        User.aggregate([{
+            $match: {
+              bot: true
+            }
+          }, {
+            $group: {
+              _id: null,
+              users: {
+                $push: "$name"
+              }
+            }
+          }],
+          function (err, admins) {
+            groupUsersByYear(admins[0].users, articleTitle, cb);
+          });
+      },
+      function (cb) {
+        // Get all users who edited the articles
+        Article.aggregate([{
+            $match: {
+              anon: {
+                $exists: false
+              },
+              title: articleTitle
+            }
+          }, {
+            $group: {
+              _id: null,
+              users: {
+                $push: "$user"
+              }
+            }
+          }],
+          function (err, allUsers) {
+            groupUsersByYear(allUsers[0].users, articleTitle, cb);
+          });
+      },
+      function (cb) {
+        // Get anonymous users
+        Article.aggregate([{
+            $match: {
+              anon: {
+                $exists: true
+              },
+              title: articleTitle
+            }
+          }, {
+            $group: {
+              _id: null,
+              users: {
+                $push: "$user"
+              }
+            }
+          }],
+          function (err, anons) {
+            groupUsersByYear(anons[0].users, articleTitle, cb);
+          });
+      }
+    ], function (err, results) {
+      if (err) {
+        next(err);
+      } else {
+        var anonsYear = results[3],
+          allUsersYear = results[2],
+          botsYear = results[1],
+          adminsYear = results[0];
+
+        var finalData = {};
+
+        pushToObj(finalData, allUsersYear, 'allUsers');
+        pushToObj(finalData, botsYear, 'bots');
+        pushToObj(finalData, adminsYear, 'admins');
+        pushToObj(finalData, anonsYear, 'anons');
+
+        var chartData = [
+          ['Year', 'Anonymous', 'Administrator', 'Bot', 'Regular User']
+        ];
+
+        async.each(_.keys(finalData), function (key) {
+          var regularUsers = finalData[key].allUsers - finalData[key].anons - finalData[key].admins - finalData[key].bots;
+          chartData.push([
+            key,
+            finalData[key].anons || 0,
+            finalData[key].admins || 0,
+            finalData[key].bots || 0,
+            regularUsers || 0
+          ]);
+        });
+
+        return res.json({
+          chartData: chartData
+        });
+      }
+    });
+  },
+  articleBar2: function (req, res, next) {
+    var articleTitle = getArticleTitle(req.query.search);
+    var users = [];
+    if (!_.isArray(req.query.user)) {
+      users.push(req.query.user);
+    } else {
+      users = req.query.user;
+    }
+
+    groupUsersByYear(users, articleTitle, function (err, results) {
+      if (err) {
+        cb(err);
+      }
+      results = _.sortBy(results, function (result) {
+        return -result.year;
+      });
+
+      var chartData = [
+        ['Year', 'Revisions']
+      ];
+
+      async.each(results, function (result) {
+        chartData.push([result._id.toString(), result.numOfUsers]);
+      });
+
+      return res.json({
+        chartData: chartData
+      });
+    });
+  },
   homePie: function (req, res, next) {
 
     async.parallel([
@@ -148,7 +404,7 @@ module.exports = {
             }
           }],
           function (err, bots) {
-            groupUsersByYear(bots[0].users, cb);
+            groupUsersByYear(bots[0].users, null, cb);
           });
       },
       function (cb) {
@@ -166,7 +422,7 @@ module.exports = {
             }
           }],
           function (err, admins) {
-            groupUsersByYear(admins[0].users, cb);
+            groupUsersByYear(admins[0].users, null, cb);
           });
       },
       function (cb) {
@@ -186,7 +442,7 @@ module.exports = {
             }
           }],
           function (err, allUsers) {
-            groupUsersByYear(allUsers[0].users, cb);
+            groupUsersByYear(allUsers[0].users, null, cb);
           });
       },
       function (cb) {
@@ -206,7 +462,7 @@ module.exports = {
             }
           }],
           function (err, anons) {
-            groupUsersByYear(anons[0].users, cb);
+            groupUsersByYear(anons[0].users, null, cb);
           });
       }
     ], function (err, results) {
@@ -257,13 +513,19 @@ var pushToObj = function (target, src, type) {
   });
 };
 
-var groupUsersByYear = function (editors, cb) {
-  Article.aggregate([{
-    $match: {
-      user: {
-        $in: editors
-      }
+var groupUsersByYear = function (editors, articleTitle, cb) {
+  var matchQuery = {
+    user: {
+      $in: editors
     }
+  };
+
+  if (articleTitle) {
+    matchQuery.title = articleTitle;
+  }
+
+  var query = [{
+    $match: matchQuery
   }, {
     $project: {
       year: {
@@ -285,5 +547,7 @@ var groupUsersByYear = function (editors, cb) {
         $size: "$users"
       }
     }
-  }], cb);
+  }];
+
+  Article.aggregate(query, cb);
 };

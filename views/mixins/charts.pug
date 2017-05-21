@@ -4,18 +4,18 @@ mixin charts
       .panel-body
         ul.nav.nav-tabs
           li.active(role="presentation")
-            a(href="#bar-chart" data-toggle="tab")
-              i.fa.fa-bar-chart
-              |  Revision number distribution by year and by user type
-          li(role="presentation")
-            a(href="#pie-chart" data-toggle="tab")
+            a(href="#pie-chart-tab" data-toggle="tab")
               i.fa.fa-pie-chart
-              |  Revision number distribution by user type
+              |  Distribution by user type
+          li(role="presentation")
+            a(href="#bar-chart-tab" data-toggle="tab")
+              i.fa.fa-bar-chart
+              |  Distribution by year and user type
 
         .tab-content.clearfix
-          #bar-chart.tab-pane.active
+          #bar-chart-tab.tab-pane
             #bar-chart-1
-          #pie-chart.tab-pane
+          #pie-chart-tab.tab-pane.active
             #pie-chart-1
 
 mixin articleCharts
@@ -24,22 +24,34 @@ mixin articleCharts
       .panel-body
         ul.nav.nav-tabs
           li.active(role="presentation")
-            a(href="#bar-chart-1" data-toggle="tab")
-              i.fa.fa-bar-chart
-              |  Revision number distribution by year and by user type
-          li(role="presentation")
-            a(href="#pie-chart" data-toggle="tab")
+            a(href="#pie-chart-tab" data-toggle="tab")
               i.fa.fa-pie-chart
-              |  Revision number distribution by user type
+              |  Distribution by user type
           li(role="presentation")
-            a(href="#bar-chart-2" data-toggle="tab")
+            a(href="#bar-chart-1-tab" data-toggle="tab")
               i.fa.fa-bar-chart
-              |  Revision number distribution by year made by one or a few of the top 5 users
+              |  Distribution by year and by user type
+          li(role="presentation")
+            a(href="#bar-chart-2-tab" data-toggle="tab")
+              i.fa.fa-bar-chart
+              |  Distribution by year made by one or a few of the top 5 users
 
         .tab-content.clearfix
-          #bar-chart-1.tab-pane.active
-            #bar-chart-1
-          #pie-chart.tab-pane
-            #pie-chart-1
-          #bar-chart-2.tab-pane
+          #bar-chart-1-tab.tab-pane
             #bar-chart-2
+          #pie-chart-tab.tab-pane.active
+            #pie-chart-2
+          #bar-chart-2-tab.tab-pane
+            .row
+              .col-sm-6.col-sm-offset-1
+                h4 Please select user/users
+                form#user-based-chart
+                  each editor,index in data.topEditors
+                    .checkbox
+                      label
+                        input(type="checkbox" name="user" value=editor._id)
+                        | #{editor._id}
+                  button.btn.btn-primary.btn-sm(type="submit") Fetch data
+
+            .row
+              #bar-chart-3
