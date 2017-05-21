@@ -32,10 +32,13 @@ mixin statistics(data)
       .panel-heading
         h3.panel-title Article with longest history
       .panel-body
-        | Panel content
+        h4 #{ data.history.longest._id }
+        h5 Created on : #{ data.history.longest.createdAt }
+
   .col-sm-6
     .panel.panel-danger
       .panel-heading
         h3.panel-title Article with shortest history
       .panel-body
-        | Panel content
+        h4 #{ data.history.shortest._id }
+        h5 Created on : #{ data.history.shortest.createdAt }
