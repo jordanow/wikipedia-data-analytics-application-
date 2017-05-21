@@ -37,16 +37,21 @@ body.well
               .panel-heading
                 h3.panel-title #{ data.article.title }
               .panel-body
-                .col-sm-6
-                  h4 Total revisions: #{ data.revisions }
+                .row
+                  .col-sm-6
+                    h4 Total revisions: #{ data.revisions }
 
-                .col-sm-6
-                  h4 Top 5 regular users
-                  ul.list-group
-                    each editor in data.topEditors
-                      li.list-group-item
-                        span.badge #{ editor.count }
-                        | #{ editor._id }
+                    if data.newRevisions > 0
+                      .alert.alert-success
+                        h5 New revisions downloaded : #{ data.newRevisions }
+
+                  .col-sm-6
+                    h4 Top 5 regular users
+                    ul.list-group
+                      each editor in data.topEditors
+                        li.list-group-item
+                          span.badge #{ editor.count }
+                          | #{ editor._id }
 
       #charts.row
         +articleCharts
