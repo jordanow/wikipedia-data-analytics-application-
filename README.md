@@ -1,3 +1,12 @@
+## Prerequisites
+- Download the `revisions.data` file from elearning. 
+- Make a folder called `data` at the root of the project.
+- Put the unzipped revisions in the `data` folder.
+- Please rename `admin.txt` to `admins.txt` and `bot.txt` to `bots.txt`.
+- Run `mongod`
+- Run `npm run setup`
+
+
 ## How to run
 
 - `npm run setup`
