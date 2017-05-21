@@ -148,7 +148,12 @@ module.exports = {
             }
           }],
           function (err, bots) {
-            groupUsersByYear(bots[0].users, articleTitle, cb);
+            var botUsers = bots.length > 0 ? bots[0].users : null;
+            if (botUsers) {
+              groupUsersByYear(botUsers, articleTitle, cb);
+            } else {
+              cb(null, []);
+            }
           });
       },
       function (cb) {
@@ -166,7 +171,12 @@ module.exports = {
             }
           }],
           function (err, admins) {
-            groupUsersByYear(admins[0].users, articleTitle, cb);
+            var adminUsers = admins.length > 0 ? admins[0].users : null;
+            if (adminUsers) {
+              groupUsersByYear(adminUsers, articleTitle, cb);
+            } else {
+              cb(null, []);
+            }
           });
       },
       function (cb) {
@@ -205,7 +215,12 @@ module.exports = {
             }
           }],
           function (err, anons) {
-            groupUsersByYear(anons[0].users, articleTitle, cb);
+            var anonUsers = anons.length > 0 ? anons[0].users : null;
+            if (anonUsers) {
+              groupUsersByYear(anonUsers, articleTitle, cb);
+            } else {
+              cb(null, []);
+            }
           });
       }
     ], function (err, results) {
