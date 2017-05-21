@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
   async = require('async');
 
 var Article = mongoose.model('Article');
+var User = mongoose.model('User');
 
 module.exports = function (req, res, next) {
   async.parallel([
@@ -51,36 +52,50 @@ var aggregateRevisions = function (cb) {
   });
 };
 
+// It only returns registered users which excludes bots and admins
 var aggregateRevisedArticlesByUniqueUsers = function (cb) {
-  Article.aggregate([{
-      $group: {
-        _id: "$title",
-        users: {
-          $addToSet: "$user"
-        }
-      }
-    }, {
-      $unwind: "$users"
-    },
-    {
-      $group: {
-        _id: "$_id",
-        count: {
-          $sum: 1
-        }
-      }
-    }, {
-      $sort: {
-        count: -1
-      }
-    }
-  ], function (err, data) {
+  User.distinct('name', function (err, botsAndAdmins) {
     if (err) {
       cb(err);
     } else {
-      cb(null, {
-        most: data[0],
-        least: data[data.length - 1]
+      Article.aggregate([{
+          $match: {
+            user: {
+              $nin: botsAndAdmins
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$title",
+            users: {
+              $addToSet: "$user"
+            }
+          }
+        }, {
+          $unwind: "$users"
+        },
+        {
+          $group: {
+            _id: "$_id",
+            count: {
+              $sum: 1
+            }
+          }
+        }, {
+          $sort: {
+            count: -1
+          }
+        }
+      ], function (err, data) {
+        if (err) {
+          cb(err);
+        } else {
+          cb(null, {
+            most: data[0],
+            least: data[data.length - 1]
+          });
+        }
       });
     }
   });
