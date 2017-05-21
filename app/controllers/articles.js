@@ -44,6 +44,10 @@ module.exports = {
             if (err) {
               cb(err);
             } else {
+              // To find the regular users
+              // Find the users of this article
+              // who are not anonymous and who dont
+              // belong to the users already in database
               Article.aggregate([{
                   $match: {
                     title: articleTitle,

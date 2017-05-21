@@ -170,12 +170,9 @@ module.exports = {
           });
       },
       function (cb) {
-        // Get all users who edited the articles
+        // Get all users who edited this article
         Article.aggregate([{
             $match: {
-              anon: {
-                $exists: false
-              },
               title: articleTitle
             }
           }, {
@@ -191,7 +188,7 @@ module.exports = {
           });
       },
       function (cb) {
-        // Get anonymous users
+        // Get all anon users who edited this article
         Article.aggregate([{
             $match: {
               anon: {
@@ -262,7 +259,7 @@ module.exports = {
         cb(err);
       }
       results = _.sortBy(results, function (result) {
-        return -result.year;
+        return result._id;
       });
 
       var chartData = [
@@ -428,12 +425,6 @@ module.exports = {
       function (cb) {
         // Get all users who edited the articles
         Article.aggregate([{
-            $match: {
-              anon: {
-                $exists: false
-              }
-            }
-          }, {
             $group: {
               _id: null,
               users: {
