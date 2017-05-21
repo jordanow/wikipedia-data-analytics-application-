@@ -1,4 +1,4 @@
-mixin navbar
+mixin navbar(showOptions)
   nav.navbar.navbar-inverse.navbar-fixed-top
     .container-fluid
       .navbar-header
@@ -11,13 +11,14 @@ mixin navbar
           i.fa.fa-desktop
           span  COMP 5347
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li.active
-            a(href='#')
-              | Statistics
-              span.sr-only (current)
-          li
-            a(href='#charts') Charts
+        if !showOptions
+          ul.nav.navbar-nav
+            li.active
+              a(href='#')
+                | Statistics
+                span.sr-only (current)
+            li
+              a(href='#charts') Charts
 
         form.navbar-form.navbar-right.search-form(role='search', action="/article")
           .form-group
