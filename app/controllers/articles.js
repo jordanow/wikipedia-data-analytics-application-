@@ -49,26 +49,25 @@ module.exports = {
                   } else {
                     var mediaWikiResults = JSON.parse(body);
                     var mediaWikiResponseValues = _.values(mediaWikiResults.query.pages);
-
                     if (mediaWikiResponseValues.length > 0) {
                       mediaWikiRevisions = mediaWikiResponseValues[0].revisions;
                       // Save only if the revisions are available
                       if (mediaWikiRevisions && mediaWikiRevisions.length > 0) {
-                        async.each(mediaWikiRevisions, function (revision) {
+                        async.each(mediaWikiRevisions, function (revision, next) {
                           revision.title = articleTitle;
-                        });
-
-                        mediaWikiRevisions = _.filter(mediaWikiRevisions, function (revision) {
-                          return moment(revision.timestamp).isAfter(moment(article.timestamp));
-                        });
-
-                        // Save mediWikiRevisions to db
-                        Article.insertMany(mediaWikiRevisions, function (err, data) {
-                          if (err) {
-                            callback(err);
-                          } else {
-                            callback(null, article);
-                          }
+                          next();
+                        }, function () {
+                          mediaWikiRevisions = _.filter(mediaWikiRevisions, function (revision) {
+                            return moment(revision.timestamp).isAfter(moment(article.timestamp));
+                          });
+                          // Save mediWikiRevisions to db
+                          Article.insertMany(mediaWikiRevisions, function (err, data) {
+                            if (err) {
+                              callback(err);
+                            } else {
+                              callback(null, article);
+                            }
+                          });
                         });
                       } else {
                         callback(null, article);
