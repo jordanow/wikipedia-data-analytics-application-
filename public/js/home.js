@@ -40,8 +40,11 @@
      };
 
      // Instantiate and draw our chart, passing in some options.
-     var pieChart = new google.visualization.PieChart(document.getElementById('pie-chart-1'));
-     pieChart.draw(data, options);
+     var pieChartDiv = document.getElementById('pie-chart-1');
+     if (pieChartDiv) {
+       var pieChart = new google.visualization.PieChart(pieChartDiv);
+       pieChart.draw(data, options);
+     }
    };
 
    // Callback that creates and populates a data table,
@@ -67,8 +70,12 @@
        }
      };
 
-     var barChart = new google.visualization.ColumnChart(document.getElementById('bar-chart-1'));
-     barChart.draw(data, options);
+     var barChartDiv = document.getElementById('bar-chart-1');
+
+     if (barChartDiv) {
+       var barChart = new google.visualization.ColumnChart(barChartDiv);
+       barChart.draw(data, options);
+     }
    };
 
    // Set a callback to run when the Google Visualization API is loaded.

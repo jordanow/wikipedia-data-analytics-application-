@@ -34,6 +34,10 @@ module.exports = {
               }, callback);
             },
             function (article, callback) {
+              if (!article || !article.timestamp) {
+                return callback();
+              }
+
               var timePassedSinceLastUpdate = moment().diff(moment(article.timestamp), 'days');
               if (timePassedSinceLastUpdate <= 1) {
                 callback(null, article);
@@ -151,15 +155,25 @@ module.exports = {
           // Only send top 5 editors
           topEditors = topEditors.slice(0, 5);
 
-          res.render('article.pug', {
-            data: {
-              found: !!article,
-              article: article,
-              revisions: results[1][0].count,
-              topEditors: topEditors,
-              newRevisions: mediaWikiRevisions && mediaWikiRevisions.length ? mediaWikiRevisions.length : 0
-            }
-          });
+
+          if (!!article) {
+            res.render('article.pug', {
+              data: {
+                found: true,
+                article: article,
+                revisions: results[1][0].count,
+                topEditors: topEditors,
+                newRevisions: mediaWikiRevisions && mediaWikiRevisions.length ? mediaWikiRevisions.length : 0
+              }
+            });
+          } else {
+            res.render('article.pug', {
+              data: {
+                found: false,
+                topEditors: []
+              }
+            });
+          }
         }
       });
     }

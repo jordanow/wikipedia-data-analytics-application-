@@ -193,8 +193,13 @@ module.exports = {
               }
             }
           }],
-          function (err, allUsers) {
-            groupUsersByYear(allUsers[0].users, articleTitle, cb);
+          function (err, all) {
+            var allUsers = all.length > 0 ? all[0].users : null;
+            if (allUsers) {
+              groupUsersByYear(allUsers, articleTitle, cb);
+            } else {
+              cb(null, []);
+            }
           });
       },
       function (cb) {
