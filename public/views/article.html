@@ -68,7 +68,7 @@
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content" ng-class="!!articleData && articleData.found ? '': 'hidden'">
       <div role="tabpanel" ng-class="selectedTab ==='bar-chart-tab-1' ? 'active tab-pane' : 'tab-pane'" id="bar-chart">
         <div id="bar-chart-2"></div>
       </div>

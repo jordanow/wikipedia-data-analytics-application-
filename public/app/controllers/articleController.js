@@ -17,9 +17,14 @@ angular.module('appControllers')
     $scope.searchArticle = function () {
       AppService.getArticle($scope.articleTitle).then(function (data) {
         $scope.articleData = data.data;
-
+        $scope.users = [];
         if ($scope.articleData.found) {
           drawCharts($scope.articleData.article.title);
+
+          var chartData = [
+            ["Year", "Revisions"]
+          ];
+          drawBarChart2(chartData);
         }
       }).catch(function (err) {
         console.log(err);
@@ -42,9 +47,7 @@ angular.module('appControllers')
     $scope.getUserChart = function () {
       AppService.postArticleBarChart2($scope.articleData.article.title, $scope.users).then(function (data) {
         var chartData = data.data.chartData;
-        if (chartData && chartData.length > 1) {
-          drawBarChart2(chartData);
-        }
+        drawBarChart2(chartData);
       }).catch(function (err) {
         console.log(err);
       });
@@ -70,6 +73,10 @@ angular.module('appControllers')
   });
 
 var drawBarChart2 = function (chartData) {
+  if (chartData.length <= 1) {
+    chartData.push([0, 0]);
+  }
+
   // Create the data table.
   var data = new google.visualization.arrayToDataTable(chartData);
 
