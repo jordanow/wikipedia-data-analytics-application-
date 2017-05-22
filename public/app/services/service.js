@@ -16,8 +16,10 @@ angular.module('appServices', [])
       return $http.get('/api/charts/article/bar1/' + articleName);
     };
 
-    var getArticleBarChart2 = function (articleName) {
-      return $http.get('/api/charts/article/bar2/' + articleName);
+    var postArticleBarChart2 = function (articleName, users) {
+      return $http.post('/api/charts/article/bar2/' + articleName, {
+        users: users
+      });
     };
 
     var getArticlePieChart2 = function (articleName) {
@@ -39,7 +41,7 @@ angular.module('appServices', [])
       getBarChart: getBarChart,
       getPieChart: getPieChart,
       getArticleBarChart1: getArticleBarChart1,
-      getArticleBarChart2: getArticleBarChart2,
+      postArticleBarChart2: postArticleBarChart2,
       getArticlePieChart2: getArticlePieChart2
     };
   });

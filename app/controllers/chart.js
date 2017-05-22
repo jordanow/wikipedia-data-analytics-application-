@@ -5,20 +5,9 @@ var mongoose = require('mongoose'),
 var Article = mongoose.model('Article'),
   User = mongoose.model('User');
 
-// Extracts the article title from the given string
-var getArticleTitle = function (query) {
-  var articleTitle;
-  if (!query || !query.split('-')[0]) {
-    articleTitle = null;
-  } else {
-    articleTitle = query.split('-')[0].trim()
-  }
-  return articleTitle;
-};
-
 module.exports = {
   articlePie: function (req, res, next) {
-    var articleTitle = getArticleTitle(req.query.search);
+    var articleTitle = req.params.article;
     async.parallel([
         function (cb) {
           // Find the number of anonymous editors
@@ -130,7 +119,7 @@ module.exports = {
       });
   },
   articleBar1: function (req, res, next) {
-    var articleTitle = getArticleTitle(req.query.search);
+    var articleTitle = req.params.article;
 
     async.parallel([
       function (cb) {
@@ -266,12 +255,11 @@ module.exports = {
     });
   },
   articleBar2: function (req, res, next) {
-    var articleTitle = getArticleTitle(req.query.search);
+    var articleTitle = req.params.article;
     var users = [];
-    if (!_.isArray(req.query.user)) {
-      users.push(req.query.user);
-    } else {
-      users = req.query.user;
+
+    if(req.body.users && req.body.users.length>0){
+      users = req.body.users;
     }
 
     groupUsersByYear(users, articleTitle, function (err, results) {

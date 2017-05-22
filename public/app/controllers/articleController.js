@@ -1,11 +1,8 @@
 angular.module('appControllers')
-  .controller('ArticleController', function ($scope, AppService) {
-    $scope.loadedBarChart1 = false;
-    $scope.loadedBarChart2 = false;
-    $scope.loadedPieChart1 = false;
-
+  .controller('ArticleController', function ($scope, AppService, _) {
     $scope.articleTitle = '';
     $scope.selectedTab = 'bar-chart-tab-1';
+    $scope.users = [];
 
     $scope.selectTab = function (tab) {
       $scope.selectedTab = tab;
@@ -20,36 +17,56 @@ angular.module('appControllers')
     $scope.searchArticle = function () {
       AppService.getArticle($scope.articleTitle).then(function (data) {
         $scope.articleData = data.data;
+
+        if ($scope.articleData.found) {
+          drawCharts($scope.articleData.article.title);
+        }
       }).catch(function (err) {
         console.log(err);
       });
     };
 
-    google.charts.setOnLoadCallback(function () {
-      // AppService.getArticleBarChart1().then(function (data) {
-      //   var chartData = data.data.chartData;
-      //   $scope.loadedBarChart1 = true;
-      //   drawBarChart1(chartData);
-      // }).catch(function (err) {
-      //   console.log(err);
-      // });
+    $scope.addUser = function (user) {
+      var found = _.find($scope.users, function (n) {
+        return n === user;
+      });
+      if (found) {
+        $scope.users = _.filter($scope.users, function (n) {
+          return n !== found;
+        });
+      } else {
+        $scope.users.push(user);
+      }
+    };
 
-      // AppService.getArticleBarChart2().then(function (data) {
-      //   var chartData = data.data.chartData;
-      //   $scope.loadedBarChart2 = true;
-      //   drawBarChart1(chartData);
-      // }).catch(function (err) {
-      //   console.log(err);
-      // });
+    $scope.getUserChart = function () {
+      AppService.postArticleBarChart2($scope.articleData.article.title, $scope.users).then(function (data) {
+        var chartData = data.data.chartData;
+        if (chartData && chartData.length > 1) {
+          drawBarChart2(chartData);
+        }
+      }).catch(function (err) {
+        console.log(err);
+      });
+    };
 
-      // AppService.getArticlePieChart2().then(function (data) {
-      //   var chartData = data.data.chartData;
-      //   $scope.loadedPieChart1 = true;
-      //   drawPieChart(chartData);
-      // }).catch(function (err) {
-      //   console.log(err);
-      // });
-    });
+    var drawCharts = function (articleTitle) {
+      google.charts.setOnLoadCallback(function () {
+        AppService.getArticleBarChart1(articleTitle).then(function (data) {
+          var chartData = data.data.chartData;
+          drawBarChart1(chartData);
+        }).catch(function (err) {
+          console.log(err);
+        });
+
+        AppService.getArticlePieChart2(articleTitle).then(function (data) {
+          var chartData = data.data;
+          drawPieChart(chartData);
+        }).catch(function (err) {
+          console.log(err);
+        });
+      });
+    };
   });
 
 var drawBarChart2 = function (chartData) {
