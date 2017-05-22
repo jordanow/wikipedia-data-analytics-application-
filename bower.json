@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-spinner": "^1.0.1"
+    "angular-spinner": "^1.0.1",
+    "ngToast": "ngtoast#^2.0.0"
   }
 }

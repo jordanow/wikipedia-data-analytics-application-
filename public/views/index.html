@@ -8,8 +8,8 @@
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js">
   </script>
-  <script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
-  <script src="https://cdn.firebase.com/libs/angularfire/0.9.0/angularfire.min.js"></script>
+  <!--<script src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/0.9.0/angularfire.min.js"></script>-->
 
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
@@ -36,9 +36,12 @@
 
   <!-- Include app scripts -->
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="bower/ngtoast/dist/ngToast.min.css">
 
   <!-- Include bower components -->
   <script src="bower_components/angular-spinner/dist/angular-spinner.min.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="bower_components/ngtoast/dist/ngToast.min.js"></script>
 
   <!-- Include app files -->
   <script src="app/services/service.js"></script>
@@ -90,8 +93,8 @@
     </div>
     <!-- /.container-fluid -->
   </nav>
+  <toast></toast>
   <div ng-view></div>
-
   <script>
     // Load the Visualization API and the corechart package.
     google.charts.load('current', {

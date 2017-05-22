@@ -1,5 +1,5 @@
 angular.module('appControllers')
-  .controller('ChartsController', function ($scope, AppService) {
+  .controller('ChartsController', function ($scope, AppService, ngToast) {
     $scope.loadedBarChart = false;
     $scope.loadedPieChart = false;
 
@@ -15,7 +15,11 @@ angular.module('appControllers')
         $scope.loadedPieChart = true;
         drawBarChart(chartData);
       }).catch(function (err) {
-        console.log(err);
+        ngToast.create({
+          className: 'danger',
+          content: err.message,
+          timeout: 6000
+        });
       });
 
       AppService.getPieChart().then(function (data) {
@@ -23,7 +27,11 @@ angular.module('appControllers')
         $scope.loadedBarChart = true;
         drawPieChart(chartData);
       }).catch(function (err) {
-        console.log(err);
+        ngToast.create({
+          className: 'danger',
+          content: err.message,
+          timeout: 6000
+        });
       });
     });
   });

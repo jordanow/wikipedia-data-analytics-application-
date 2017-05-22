@@ -3,6 +3,7 @@ angular.module('wikipediaApp', [
     'angularSpinner',
     'appControllers',
     'appRoutes',
-    'appServices'
+    'appServices',
+    'ngToast'
   ])
   .constant('_', window._);

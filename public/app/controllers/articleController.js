@@ -1,5 +1,5 @@
 angular.module('appControllers')
-  .controller('ArticleController', function ($scope, AppService, _) {
+  .controller('ArticleController', function ($scope, AppService, _, ngToast) {
     $scope.articleTitle = '';
     $scope.selectedTab = 'bar-chart-tab-1';
     $scope.users = [];
@@ -11,7 +11,11 @@ angular.module('appControllers')
     AppService.getArticlesList().then(function (data) {
       $scope.articles = data.data.articles;
     }).catch(function (err) {
-      console.log(err);
+      ngToast.create({
+        className: 'danger',
+        content: err.message,
+        timeout: 6000
+      });
     });
 
     $scope.searchArticle = function () {
@@ -27,7 +31,11 @@ angular.module('appControllers')
           drawBarChart2(chartData);
         }
       }).catch(function (err) {
-        console.log(err);
+        ngToast.create({
+          className: 'danger',
+          content: err.message,
+          timeout: 6000
+        });
       });
     };
 
@@ -49,7 +57,11 @@ angular.module('appControllers')
         var chartData = data.data.chartData;
         drawBarChart2(chartData);
       }).catch(function (err) {
-        console.log(err);
+        ngToast.create({
+          className: 'danger',
+          content: err.message,
+          timeout: 6000
+        });
       });
     };
 
@@ -59,14 +71,22 @@ angular.module('appControllers')
           var chartData = data.data.chartData;
           drawBarChart1(chartData);
         }).catch(function (err) {
-          console.log(err);
+          ngToast.create({
+            className: 'danger',
+            content: err.message,
+            timeout: 6000
+          });
         });
 
         AppService.getArticlePieChart2(articleTitle).then(function (data) {
           var chartData = data.data;
           drawPieChart(chartData);
         }).catch(function (err) {
-          console.log(err);
+          ngToast.create({
+            className: 'danger',
+            content: err.message,
+            timeout: 6000
+          });
         });
       });
     };
