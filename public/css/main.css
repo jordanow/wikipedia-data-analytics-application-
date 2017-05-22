@@ -21,3 +21,8 @@ form.search-form button {
 form.search-form input {
   min-width: 400px;
 }
+
+/* Make the input field bigger */
+.input-wide {
+  min-width: 50% !important;
+}
