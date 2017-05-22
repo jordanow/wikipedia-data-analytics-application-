@@ -4,8 +4,17 @@ angular.module('appServices', [])
       return $http.get('/api/home/statistics');
     };
 
+    var getBarChart = function () {
+      return $http.get('/api/charts/home/bar');
+    };
+
+    var getPieChart = function () {
+      return $http.get('/api/charts/home/pie');
+    };
 
     return {
-      getHomeStatistics: getHomeStatistics
+      getHomeStatistics: getHomeStatistics,
+      getBarChart: getBarChart,
+      getPieChart: getPieChart
     };
   });

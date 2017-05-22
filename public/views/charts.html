@@ -1,5 +1,40 @@
 <div class="container">
-  <h3>
-    {{title}}
-  </h3>
+  <div class="row">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" ng-class="selectedTab ==='bar-chart-tab' ? 'active' : ''">
+        <a href="" aria-controls="bar-chart" ng-click="selectTab('bar-chart-tab')">
+          <i class="fa fa-bar-chart"></i> Distribution by year and user type
+        </a>
+      </li>
+      <li role="presentation" ng-class="selectedTab ==='pie-chart-tab' ? 'active' : ''">
+        <a href="" aria-controls="pie-chart" ng-click="selectTab('pie-chart-tab')">
+          <i class="fa fa-pie-chart"></i> Distribution by user type
+        </a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div role="tabpanel" ng-class="selectedTab ==='bar-chart-tab' ? 'active tab-pane' : 'tab-pane'" id="bar-chart">
+        <div class="row" ng-if="loadedBarChart">
+          <div class="col-sm-12 text-center margin-top">
+            <span us-spinner="{radius:30, width:8, length: 16}"></span>
+          </div>
+        </div>
+
+        <div id="bar-chart"></div>
+      </div>
+      <div role="tabpanel" ng-class="selectedTab ==='pie-chart-tab' ? 'active  tab-pane' : ' tab-pane'" id="pie-chart">
+        <div class="row" ng-if="loadedPieChart">
+          <div class="col-sm-12 text-center margin-top">
+            <span us-spinner="{radius:30, width:8, length: 16}"></span>
+          </div>
+        </div>
+        <div id="pie-chart"></div>
+      </div>
+    </div>
+
+  </div>
 </div>
