@@ -1,5 +1,75 @@
 <div class="container">
-  <h3>
-    {{title}}
-  </h3>
+  <div class="row" ng-if="statistics.revisions.most">
+    <div class="col-sm-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Most revisions
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.revisions.most._id }}</h4>
+          <h5>Total revisions: {{ statistics.revisions.most.count }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          Least revisions
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.revisions.least._id }}</h4>
+          <h5>Total revisions: {{ statistics.revisions.least.count }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Article edited by largest group of registered users
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.uniqueRevisions.most._id }}</h4>
+          <h5>Total unique users: {{ statistics.uniqueRevisions.most.count }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          Article edited by smallest group of registered users
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.uniqueRevisions.least._id }}</h4>
+          <h5>Total unique users: {{ statistics.uniqueRevisions.least.count }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Article with longest history
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.history.longest._id }}</h4>
+          <h5>Total unique users: {{ statistics.history.longest.createdAt }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          Article with shortest history
+        </div>
+        <div class="panel-body">
+          <h4>{{ statistics.history.shortest._id }}</h4>
+          <h5>Total unique users: {{ statistics.history.shortest.createdAt }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

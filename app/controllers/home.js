@@ -12,7 +12,7 @@ module.exports = {
       root: path.join(__dirname, '../../public/views')
     });
   },
-  data: function (req, res, next) {
+  statistics: function (req, res, next) {
     async.parallel([
         aggregateRevisions,
         aggregateRevisedArticlesByUniqueUsers,
@@ -22,12 +22,10 @@ module.exports = {
         if (err) {
           next(err);
         }
-        res.render('home.pug', {
-          data: {
-            revisions: results[0],
-            uniqueRevisions: results[1],
-            history: results[2]
-          }
+        return res.json({
+          revisions: results[0],
+          uniqueRevisions: results[1],
+          history: results[2]
         });
       });
   }

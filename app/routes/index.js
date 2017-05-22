@@ -12,8 +12,9 @@ router.get('/api/charts/article/pie', chartController.articlePie);
 router.get('/api/charts/article/bar1', chartController.articleBar1);
 router.get('/api/charts/article/bar2', chartController.articleBar2);
 router.get('/api/articles/list', articleController.list);
+router.get('/api/home/statistics', homeController.statistics);
+
 // Pages
-router.get('*', homeController.render);
-// router.get('/article', articleController.render);
+router.get('/*', homeController.render);
 
 module.exports = router;
