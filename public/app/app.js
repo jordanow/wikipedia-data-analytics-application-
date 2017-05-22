@@ -1,1 +1,7 @@
-angular.module('wikipediaApp', ['ngRoute', 'appRoutes', 'appControllers', 'appServices']);
+angular.module('wikipediaApp', [
+  'ngRoute',
+  'angularSpinner',
+  'appControllers',
+  'appRoutes',
+  'appServices'
+]);
