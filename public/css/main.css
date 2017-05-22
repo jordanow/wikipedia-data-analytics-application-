@@ -7,8 +7,8 @@ nav {
 
 /* Since the top bar is stationary, we need to push the html body by 80px */
 
-body {
-  padding-top: 80px !important;
+.margin-top {
+  padding-top: 50px !important;
 }
 
 

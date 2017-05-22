@@ -13,7 +13,7 @@ router.get('/api/charts/article/bar1', chartController.articleBar1);
 router.get('/api/charts/article/bar2', chartController.articleBar2);
 router.get('/api/articles/list', articleController.list);
 // Pages
-router.get('/', homeController);
-router.get('/article', articleController.render);
+router.get('*', homeController.render);
+// router.get('/article', articleController.render);
 
 module.exports = router;

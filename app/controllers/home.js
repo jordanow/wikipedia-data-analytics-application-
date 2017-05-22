@@ -1,28 +1,36 @@
 var mongoose = require('mongoose'),
   _ = require('lodash'),
+  path = require('path'),
   async = require('async');
 
 var Article = mongoose.model('Article');
 var User = mongoose.model('User');
 
-module.exports = function (req, res, next) {
-  async.parallel([
-      aggregateRevisions,
-      aggregateRevisedArticlesByUniqueUsers,
-      getArticleRevisionAge
-    ],
-    function (err, results) {
-      if (err) {
-        next(err);
-      }
-      res.render('home.pug', {
-        data: {
-          revisions: results[0],
-          uniqueRevisions: results[1],
-          history: results[2]
-        }
-      });
+module.exports = {
+  render: function (req, res) {
+    res.sendFile('index.html', {
+      root: path.join(__dirname, '../../public/views')
     });
+  },
+  data: function (req, res, next) {
+    async.parallel([
+        aggregateRevisions,
+        aggregateRevisedArticlesByUniqueUsers,
+        getArticleRevisionAge
+      ],
+      function (err, results) {
+        if (err) {
+          next(err);
+        }
+        res.render('home.pug', {
+          data: {
+            revisions: results[0],
+            uniqueRevisions: results[1],
+            history: results[2]
+          }
+        });
+      });
+  }
 };
 
 var getArticleRevisionAge = function (cb) {
