@@ -258,26 +258,49 @@ module.exports = {
     var articleTitle = req.params.article;
     var users = [];
 
-    if(req.body.users && req.body.users.length>0){
+    if (req.body.users && req.body.users.length > 0) {
       users = req.body.users;
     }
 
-    groupUsersByYear(users, articleTitle, function (err, results) {
-      if (err) {
-        cb(err);
-      }
-      results = _.sortBy(results, function (result) {
-        return result._id;
+    var chartData = [];
+    var chartDataHeader = ['Year'];
+
+    var finalData = {};
+
+    async.eachSeries(users, function (user, cb) {
+      groupUsersByYear([user], articleTitle, function (err, results) {
+        if (err) {
+          cb(err);
+        }
+        results = _.sortBy(results, function (result) {
+          return result._id;
+        });
+        chartDataHeader.push(user);
+        pushToObj(finalData, results, user);
+        cb();
+      });
+    }, function () {
+
+      _.each(_.keys(finalData), function (year) {
+        _.each(users, function (user) {
+          if (!finalData[year][user]) {
+            finalData[year][user] = 0;
+          }
+        });
       });
 
-      var chartData = [
-        ['Year', 'Revisions']
-      ];
+      _.each(_.keys(finalData), function (year) {
+        var data = [year];
 
-      async.each(results, function (result) {
-        chartData.push([result._id.toString(), result.numOfUsers]);
+        _.each(_.keys(finalData[year]), function (user) {
+          var indexOfUser = _.indexOf(chartDataHeader, user);
+          data[indexOfUser] = (finalData[year][user]);
+        });
+
+        chartData.push(data);
       });
 
+      chartData.unshift(chartDataHeader);
       return res.json({
         chartData: chartData
       });
