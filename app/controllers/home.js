@@ -145,6 +145,9 @@ var aggregateRevisedArticlesByUniqueUsers = function (cb) {
           $match: {
             user: {
               $nin: botsAndAdmins
+            },
+            anon: {
+              $exists: false
             }
           }
         },
