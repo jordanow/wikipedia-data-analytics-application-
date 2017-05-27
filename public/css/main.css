@@ -26,3 +26,8 @@ form.search-form input {
 .input-wide {
   min-width: 50% !important;
 }
+
+#spinner {
+  position: relative;
+  top: 25vh;
+}
