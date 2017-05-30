@@ -7,7 +7,7 @@
     "test": "",
     "setup": "npm install && bower install",
     "dev": "gulp start",
-    "start": "node index.js",
+    "start": "npm run setup && node index.js",
     "server": "gulp nodemon"
   },
   "keywords": [
